@@ -1,0 +1,119 @@
+## @file
+#
+#  Copyright (c) 2021, Intel Corporation. All rights reserved.<BR>
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION          = 0x00010005
+  BASE_NAME            = IntelgbeUndiDxe
+  FILE_GUID            = BB801A52-C90F-4EDE-91B2-82520888CBC3
+
+  # UEFI_DRIVER is compliant with EFI1.10 or UEFI 2.0 specification
+  MODULE_TYPE          = UEFI_DRIVER
+
+  VERSION_STRING       = 1.0
+  ENTRY_POINT          = InitializeIntelgbeUNDIDriver
+  UNLOAD_IMAGE         = IntelgbeUndiUnload
+
+[BuildOptions.common]
+  *_*_*_CC_FLAGS = -D UNDI_1G -D PREBOOT_SUPPORT
+
+  # Enable to use PciIo protocols for PCI reads/writes. (Experimental!)
+  #*_*_*_CC_FLAGS = -D CONFIG_ACCESS_TO_CSRS
+
+  # Generates extra debug info when building with Microsoft compilers.
+  MSFT:*_*_*_CC_FLAGS = /FAcs
+
+  # Disable deprecated/unsafe functions (will cause build errors on use)
+  *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
+
+  # Disable debug macros for RELEASE builds.
+  RELEASE_*_*_CC_FLAGS = -D MDEPKG_NDEBUG
+
+[BuildOptions.X64]
+  *_*_*_CC_FLAGS = -D EFIX64
+
+[BuildOptions.IA32]
+  *_*_*_CC_FLAGS = -D EFI32
+
+  # Disable warning 4305: truncation from ... to ... (data loss when casting to a smaller type)
+  MSFT:*_*_*_CC_FLAGS = /wd4305
+
+[BuildOptions.ARM]
+  *_*_*_CC_FLAGS = -D ARCH_ARM
+
+[BuildOptions.AARCH64]
+  *_*_*_CC_FLAGS = -D ARCH_AARCH64
+
+[Sources.common]
+Init.c
+Init.h
+Intelgbe.h
+Intelgbe.c
+DeviceSupport.h
+DeviceSupport.c
+Brand.c
+Dma.c
+Dma.h
+Intelgbe_osdep.h
+Intelgbe_osdep.c
+Decode.c
+Decode.h
+AdapterInformation.h
+AdapterInformation.c
+ComponentName.c
+ComponentName.h
+DriverConfiguration.c
+DriverConfiguration.h
+StartStop.c
+StartStop.h
+
+IntelGbe/intelgbe_stmmac.c
+IntelGbe/intelgbe_stmmac.h
+IntelGbe/intelgbe_api.h
+IntelGbe/intelgbe_api.c
+IntelGbe/intelgbe_phy.c
+IntelGbe/maxlinear_gpyxxx.c
+IntelGbe/maxlinear_gpyxxx.h
+IntelGbe/marvell_88e1512.c
+IntelGbe/marvell_88e1512.h
+IntelGbe/marvell_88e2110.c
+IntelGbe/marvell_88e2110.h
+
+[sources.X64]
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses.common]
+  BaseLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiRuntimeServicesTableLib
+  BaseMemoryLib
+  PrintLib
+  UefiLib
+  HiiLib
+
+[Protocols.common]
+  gEfiNetworkInterfaceIdentifierProtocolGuid_31
+  gEfiPciIoProtocolGuid
+  gEfiDevicePathProtocolGuid
+  gEfiFormBrowser2ProtocolGuid                  ## CONSUMES
+  gEfiHiiStringProtocolGuid                     ## CONSUMES
+  gEfiHiiConfigRoutingProtocolGuid              ## CONSUMES
+  gEfiHiiConfigAccessProtocolGuid               ## PRODUCES
+  gEfiFormBrowser2ProtocolGuid                  ## CONSUMES
+  gEfiHiiDatabaseProtocolGuid                   ## CONSUMES
+  gEfiHiiPackageListProtocolGuid                ## CONSUMES
+  gEfiDriverSupportedEfiVersionProtocolGuid
+  gEfiDriverHealthProtocolGuid
+
+[Guids]
+  gEfiIfrTianoGuid                  ## CONSUMES ## Guid
+  gEfiEventExitBootServicesGuid     ## PRODUCES ## Event
+  gEfiEventVirtualAddressChangeGuid ## PRODUCES ## Event
