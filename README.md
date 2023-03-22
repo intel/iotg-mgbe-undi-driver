@@ -29,3 +29,10 @@ Run the following commands from UEFI Shell to load/unload UNDI Driver. Please no
   unload <Driver ID>               # Eg: unload ED
   load <New IntelgbeUndiDxe.efi>   # Eg: load IntelgbeUndiDxe.efi
 ```
+
+# How to permanently replace UNDI Driver in UEFI BIOS
+
+1) Replace the existing UNDI driver file in the UEFI BIOS Source code and build the BIOS.
+2) Flash the BIOS into the platform. The new UNDI driver will be loaded when the platform boots.
+
+Note: For Intel Reference UEFI BIOS Source Code and steps to build UEFI BIOS, please contact your Independent BIOS Vendor (IBV).
